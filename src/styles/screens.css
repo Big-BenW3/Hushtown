@@ -1,0 +1,1100 @@
+/* ==========================================================================
+   Per-screen styles: lobby, role, night, dawn, day, vote, verdict, end, join
+   Mobile first. Desktop adjustments live at the bottom of each block.
+   ========================================================================== */
+
+.stage {
+  min-height: 100dvh;
+  background: var(--ink);
+}
+
+/* Phase backdrops */
+.stage--dawn,
+.stage--verdict {
+  background: var(--dawn);
+}
+
+.stage--vote {
+  background: radial-gradient(ellipse at 50% 0%, #2a0c0f 0%, var(--ink) 70%);
+}
+
+.stage--end {
+  background: var(--panel);
+}
+
+/* A screen keeps its natural height; if it is taller than the pane, the pane scrolls rather than clipping it. */
+.split__pane > .screen {
+  flex-shrink: 0;
+}
+
+/* Utility classes used by several screens */
+.center {
+  text-align: center;
+}
+
+.small {
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+.mobile-only {
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none;
+  }
+
+  /* Dedicated scrollbars are fine on desktop where panes are tall */
+  .split__pane {
+    padding-right: 4px;
+  }
+}
+
+/* Phones should never show scrollbars (content is sized to fit) */
+@media (max-width: 1023px) {
+  .split__pane {
+    scrollbar-width: none;
+  }
+
+  .split__pane::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.corner {
+  position: absolute;
+  width: 64px;
+  height: auto;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.corner--br {
+  right: 6px;
+  bottom: 6px;
+}
+
+.corner--tr {
+  right: 6px;
+  top: 6px;
+  transform: scaleY(-1);
+}
+
+.scratch-art .scratch {
+  stroke: var(--blood);
+  fill: none;
+  stroke-linecap: round;
+}
+
+.banner-inline {
+  padding: 10px 14px;
+  border: 2px dashed var(--line);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ---------- gate screens (loading, gone, 404) ---------- */
+
+.gate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 100dvh;
+  padding: 32px 22px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   Lobby
+   ========================================================================== */
+
+.lobby {
+  gap: 14px;
+}
+
+.lobby__side,
+.lobby__souls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lobby__code {
+  font-size: clamp(72px, 22vw, 150px);
+  line-height: 0.9;
+  letter-spacing: 0.06em;
+  color: var(--bone);
+  text-shadow: 6px 6px 0 var(--blood);
+  transform: rotate(-3deg);
+  transform-origin: left center;
+}
+
+.lobby__block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  min-height: 40px;
+  padding: 0 14px;
+  background: transparent;
+  border: 3px dashed var(--line);
+  color: var(--muted);
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  transition: transform 0.15s var(--ease-out), background 0.15s;
+}
+
+.chip[aria-checked='true'] {
+  background: var(--bone);
+  border: 3px solid var(--bone);
+  color: var(--ink);
+  transform: rotate(-1.5deg);
+}
+
+.chip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stepper__btn {
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  border: 3px solid var(--bone);
+  color: var(--bone);
+  font-family: var(--display);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.stepper__btn:hover:not(:disabled) {
+  background: var(--bone);
+  color: var(--ink);
+}
+
+.stepper__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stepper__value {
+  min-width: 92px;
+  text-align: center;
+  font-size: 40px;
+}
+
+.lobby__start {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toe-tag {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 6px 34px;
+  background: var(--bone);
+  color: var(--ink);
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%);
+  font-family: var(--display);
+  font-size: 24px;
+  animation: pop 0.35s var(--ease-out) backwards;
+}
+
+.toe-tag:nth-child(odd) {
+  transform: rotate(-1.5deg);
+}
+
+.toe-tag:nth-child(even) {
+  transform: rotate(1.2deg);
+}
+
+.toe-tag--you {
+  background: var(--blood);
+  color: var(--bone);
+}
+
+.toe-tag--away {
+  opacity: 0.55;
+}
+
+.toe-tag--empty {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  clip-path: none;
+  outline: 3px dashed var(--line);
+  outline-offset: -3px;
+  font-family: var(--body);
+  font-size: 15px;
+}
+
+.toe-tag__hole {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.toe-tag__away {
+  font-family: var(--body);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tag--outline {
+  background: transparent;
+  color: currentColor;
+  border: 2px solid currentColor;
+}
+
+.tag--lg {
+  padding: 8px 14px;
+  font-size: 16px;
+}
+
+.tag--line {
+  background: transparent;
+  border: 2px solid var(--bone);
+  color: var(--bone);
+}
+
+.lobby__eyes {
+  align-self: flex-start;
+  margin-top: 12px;
+}
+
+@media (min-width: 1024px) {
+  .lobby {
+    flex-direction: row;
+    gap: 56px;
+    padding-top: 8px;
+  }
+
+  .lobby__side {
+    flex: 0 0 340px;
+  }
+
+  .lobby__souls {
+    flex: 1;
+  }
+}
+
+/* ==========================================================================
+   Role reveal
+   ========================================================================== */
+
+.role {
+  position: relative;
+  align-items: stretch;
+  gap: 18px;
+}
+
+.role__top {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.role__stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 14px;
+}
+
+.role__shadow {
+  position: absolute;
+  inset: 20px 6% 0;
+  background: var(--blood-deep);
+  transform: rotate(3deg);
+}
+
+.role__card {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+  padding: 22px;
+  border: 6px solid var(--bone);
+  background: var(--panel);
+  transform: rotate(-2deg);
+  transition: transform 0.25s var(--ease-out), background 0.25s;
+}
+
+.role__card.is-held {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.role__card.tone-blood.is-held {
+  background: var(--blood);
+}
+
+.role__card.tone-bone.is-held {
+  background: var(--bone);
+  color: var(--ink);
+}
+
+.role__card.tone-green.is-held {
+  background: #0f1a0b;
+  border-color: var(--green);
+}
+
+.role__face,
+.role__back {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: pop 0.3s var(--ease-out);
+}
+
+.role__back {
+  align-items: center;
+  justify-content: center;
+  min-height: 290px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.role__eye {
+  width: 150px;
+  height: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.role__eye--closed {
+  width: 130px;
+}
+
+.role__name {
+  font-size: clamp(56px, 17vw, 84px);
+  line-height: 0.9;
+  overflow-wrap: anywhere;
+}
+
+.tone-green .role__name {
+  color: var(--green);
+}
+
+.role__text {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.role__strip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 3px solid currentColor;
+  font-family: var(--display);
+  font-size: 24px;
+}
+
+.role__hint {
+  max-width: 220px;
+  font-size: 14px;
+}
+
+.role__hold {
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.role__note {
+  text-align: center;
+}
+
+.role__progress {
+  text-align: center;
+}
+
+.role__eyes {
+  align-self: center;
+}
+
+/* ==========================================================================
+   Night
+   ========================================================================== */
+
+.night {
+  position: relative;
+  background: linear-gradient(180deg, var(--ink) 0%, #12090a 100%);
+}
+
+.night__title {
+  font-size: 56px;
+  line-height: 0.9;
+  transform: rotate(-2deg);
+  text-shadow: 4px 4px 0 var(--blood-deep);
+}
+
+.night__ask {
+  font-size: clamp(48px, 14vw, 72px);
+  line-height: 0.92;
+}
+
+.night__hint {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.night__lock {
+  margin-top: auto;
+}
+
+.night__eyes {
+  align-self: center;
+}
+
+.notebook {
+  padding: 12px 14px;
+  border: 2px dashed var(--line);
+  font-size: 14px;
+}
+
+.notebook ul {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notebook__bad {
+  color: var(--blood);
+}
+
+.night--sleep .sleep {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.sleep__moon {
+  width: 150px;
+  height: auto;
+  animation: drift 6s ease-in-out infinite;
+}
+
+.sleep__text {
+  max-width: 300px;
+  color: var(--muted);
+}
+
+.sleep__eyes {
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   Dawn and verdict
+   ========================================================================== */
+
+.dawn {
+  position: relative;
+  background: var(--dawn);
+  gap: 12px;
+}
+
+.dawn__title {
+  font-size: clamp(48px, 13.5vw, 90px);
+  line-height: 0.9;
+  transform: rotate(-2deg);
+}
+
+.dawn__scrawl {
+  color: var(--green);
+}
+
+.dawn__text {
+  max-width: 440px;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.dawn__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dawn__eyes {
+  align-self: center;
+  margin-top: auto;
+}
+
+.grave {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  /* The caption is positioned over the stone, so the figure must be exactly as wide as the stone. */
+  width: min(190px, 50vw);
+  margin: 0 auto;
+  padding: 0;
+  animation: rise 0.7s var(--ease-out);
+}
+
+.grave--hanged {
+  width: auto;
+  max-width: 100%;
+}
+
+.grave__stone {
+  width: 100%;
+  height: auto;
+}
+
+.grave__text {
+  position: absolute;
+  inset: 14% 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--ink);
+  text-align: center;
+}
+
+.grave__text--solo {
+  position: static;
+  padding: 24px;
+  background: var(--bone);
+  width: min(300px, 100%);
+  transform: rotate(-1.5deg);
+  box-shadow: 8px 8px 0 var(--blood-deep);
+}
+
+.grave__small {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+}
+
+.grave__name {
+  font-size: 36px;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.grave__rule {
+  width: 70%;
+  height: 3px;
+  margin: 8px 0;
+  background: var(--ink);
+}
+
+.verdict__role {
+  font-size: 40px;
+  color: var(--blood);
+  line-height: 1;
+}
+
+.calm {
+  display: flex;
+  justify-content: center;
+}
+
+.calm svg {
+  width: min(170px, 42vw);
+  height: auto;
+  animation: drift 7s ease-in-out infinite;
+}
+
+.votes {
+  padding: 12px 14px;
+  border: 2px dashed var(--line);
+  font-size: 15px;
+}
+
+.votes ul {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.votes li + li {
+  margin-top: 4px;
+}
+
+@media (min-width: 1024px) {
+  .dawn .grave {
+    margin-left: 0;
+  }
+}
+
+/* ==========================================================================
+   Day: suspects grid
+   ========================================================================== */
+
+.day {
+  gap: 14px;
+}
+
+.day__num {
+  font-size: 56px;
+  line-height: 0.9;
+  transform: rotate(-2deg);
+  text-shadow: 4px 4px 0 var(--blood-deep);
+}
+
+.day__ask {
+  font-size: clamp(40px, 11vw, 56px);
+  line-height: 1;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 4px 10px;
+  align-items: center;
+  padding: 10px;
+  background: var(--panel);
+  border: 3px solid var(--line);
+  transition: transform 0.2s var(--ease-out), border-color 0.2s;
+  animation: pop 0.35s var(--ease-out) backwards;
+}
+
+.tile:nth-child(odd) {
+  transform: rotate(-1deg);
+}
+
+.tile:nth-child(even) {
+  transform: rotate(1deg);
+}
+
+.tile--hot {
+  border-color: var(--blood);
+  box-shadow: 5px 5px 0 var(--blood-deep);
+}
+
+.tile--you {
+  border-style: dashed;
+}
+
+.face {
+  width: 44px;
+  height: 44px;
+}
+
+.tile__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tile__name {
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.tile__tag {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.tile--hot .tile__tag {
+  color: var(--blood);
+}
+
+.tile__foot {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tile__tally {
+  min-width: 36px;
+  color: var(--blood);
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.1em;
+}
+
+.tile__btn {
+  min-height: 36px;
+  padding: 0 12px;
+  background: transparent;
+  border: 2px solid var(--bone);
+  color: var(--bone);
+  font-family: var(--display);
+  font-size: 17px;
+  letter-spacing: 0.08em;
+}
+
+.tile__btn:hover:not(:disabled) {
+  background: var(--bone);
+  color: var(--ink);
+}
+
+.tile__btn[aria-pressed='true'] {
+  background: var(--blood);
+  border-color: var(--blood);
+}
+
+.tile__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.day__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.reactions {
+  display: none;
+}
+
+.reactions__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.dead-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.dead-list s {
+  text-decoration-color: var(--blood);
+}
+
+@media (min-width: 1024px) {
+  .tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .tile {
+    grid-template-columns: 56px 1fr;
+    padding: 14px;
+  }
+
+  .face {
+    width: 56px;
+    height: 56px;
+  }
+
+  .tile__name {
+    font-size: 26px;
+  }
+
+  .reactions {
+    display: block;
+  }
+}
+
+/* ==========================================================================
+   Vote
+   ========================================================================== */
+
+.vote {
+  position: relative;
+  gap: 12px;
+}
+
+.gallows {
+  position: absolute;
+  top: 18px;
+  right: 14px;
+  width: 92px;
+  height: auto;
+  pointer-events: none;
+}
+
+.gallows__noose {
+  transform-origin: 96px 54px;
+  animation: drift 3s ease-in-out infinite;
+}
+
+.vote__ask {
+  font-size: clamp(64px, 20vw, 100px);
+  line-height: 0.88;
+  transform: rotate(-2deg);
+  text-shadow: 5px 5px 0 var(--blood-deep);
+}
+
+.vote__timer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.vote__cast {
+  margin-top: 4px;
+}
+
+.pick--abstain {
+  border-style: dashed;
+}
+
+/* ==========================================================================
+   End screen
+   ========================================================================== */
+
+.end {
+  position: relative;
+  gap: 14px;
+  padding-top: 40px;
+  overflow: hidden;
+}
+
+.end__drips {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  fill: var(--blood);
+}
+
+.end--town .end__drips {
+  fill: var(--green);
+}
+
+.end__kicker {
+  position: relative;
+  margin-top: 36px;
+}
+
+.end__title {
+  position: relative;
+  font-size: clamp(52px, 15vw, 110px);
+  line-height: 0.86;
+  transform: rotate(-2deg);
+}
+
+.end__who {
+  color: var(--blood);
+  text-shadow: 5px 5px 0 var(--bone);
+}
+
+.end--town .end__who {
+  color: var(--green);
+  text-shadow: 5px 5px 0 var(--ink);
+}
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roster__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--ink);
+  border: 2px solid var(--line);
+  font-family: var(--display);
+  font-size: 20px;
+}
+
+.roster__row.is-dead .roster__name {
+  text-decoration: line-through;
+  text-decoration-color: var(--blood);
+}
+
+.roster__row.is-mafia {
+  border-color: var(--blood);
+}
+
+.timeline {
+  display: none;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (min-width: 1024px) {
+  .timeline {
+    display: block;
+  }
+
+  .roster {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Join screen
+   ========================================================================== */
+
+.join-screen {
+  position: relative;
+  display: flex;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.join-screen__scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.join-screen__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 48px 22px 32px;
+}
+
+.join-screen__title {
+  font-size: clamp(72px, 22vw, 110px);
+  line-height: 0.9;
+  transform: rotate(-3deg);
+  text-shadow: 6px 6px 0 var(--blood-deep);
+}
+
+.join-screen__sub,
+.join-screen__foot {
+  text-align: center;
+}
+
+.join {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  background: color-mix(in srgb, var(--ink) 88%, transparent);
+  border: 3px solid var(--bone);
+}
+
+.join-screen__eyes {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+}
+
+@media (min-width: 1024px) {
+  .join-screen__content {
+    justify-content: center;
+    max-width: 520px;
+  }
+
+  .join-screen__scene {
+    opacity: 0.8;
+  }
+}
+
+/* ==========================================================================
+   Reduced motion: keep layout and colour, drop movement
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- chat room switcher (living: none; dead: graveyard / town square) ---------- */
+
+.chat__switch {
+  display: flex;
+  gap: 6px;
+}
+
+.chat__switch-btn {
+  min-height: 32px;
+  padding: 0 10px;
+  background: transparent;
+  border: 2px dashed var(--line);
+  color: var(--muted);
+  font-family: var(--display);
+  font-size: 16px;
+  letter-spacing: 0.06em;
+}
+
+.chat__switch-btn[aria-selected='true'] {
+  background: var(--bone);
+  border: 2px solid var(--bone);
+  color: var(--ink);
+}
+
+.chat__switch-btn:hover:not([aria-selected='true']) {
+  color: var(--bone);
+  border-color: var(--bone);
+}
